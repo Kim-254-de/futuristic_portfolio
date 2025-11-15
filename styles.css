@@ -7,6 +7,13 @@ body {
   scroll-behavior: smooth;
 }
 
+/* Make box-sizing predictable and ensure media scales down on small screens */
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; }
+
+/* Prevent images/media from causing horizontal overflow */
+img, picture, video, svg { max-width: 100%; height: auto; display: block; }
+
 /* NAVBAR CONTAINER */
 .navbar {
   width: 100%;
@@ -351,6 +358,12 @@ body {
   #projects .projects-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* Make project cards fluid on small screens to avoid horizontal overflow */
+@media (max-width: 720px) {
+  .project-inner { flex-direction: column; align-items: stretch; }
+  .project-img { width: 100%; max-width: 100%; height: auto; margin-bottom: 12px; }
+}
+
 /* ======== ABOUT SECTION ======== */
 #about {
   padding: 80px 24px;
@@ -360,6 +373,99 @@ body {
 #about .container {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+/* ======== SKILLS SECTION ======== */
+#skills .skills-intro {
+  color: #d0d0d0;
+  max-width: 720px;
+  margin-bottom: 18px;
+}
+
+.skills-controls {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0 18px 0;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #cfefff;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.filter-btn.active {
+  background: linear-gradient(90deg,#00f0ff22,#00cfe833);
+  border-color: #00cfe8;
+  color: #001;
+  box-shadow: 0 6px 18px rgba(0,207,232,0.08);
+}
+
+.filter-btn:focus {
+  outline: 2px solid rgba(0,207,232,0.18);
+  outline-offset: 2px;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.skill-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.03);
+  padding: 14px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.skill-head {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.skill-icon {
+  width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center;
+  color: #00cfe8;
+}
+.skill-name { font-weight:700; color:#d0d0d0; }
+.skill-meta { font-size:0.85rem; color:#d0d0d0; }
+
+.skill-bar {
+  background: rgba(255,255,255,0.03);
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.skill-bar-fill {
+  height:100%;
+  /* switched to a softer green gradient for better contrast on the skill bars */
+  background: linear-gradient(90deg,#00d27a,#00ff8a);
+  width: 0%;
+  transition: width 600ms ease;
+}
+.skill-bar-label { display:flex; justify-content:space-between; font-size:0.85rem; color:#d0d0d0; }
+
+.skill-actions { display:flex; gap:10px; align-items:center; }
+.view-projects { background:transparent; border:none; color:#7ff; text-decoration:underline; cursor:pointer; padding:6px 8px; border-radius:6px; }
+.view-projects[disabled] { opacity:0.35; cursor:not-allowed; text-decoration:none; }
+
+/* highlight projects when a skill links to them */
+.project.highlight { box-shadow: 0 8px 30px rgba(0,207,232,0.12); transform: translateY(-4px); border-color: rgba(0,207,232,0.25); }
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-bar-fill { transition: none; }
+}
+
+@media (max-width: 720px) {
+  .skills-controls { justify-content: flex-start; }
+  .skills-grid { gap: 12px; }
 }
 
 #about h2 {
@@ -672,8 +778,11 @@ body {
 
 /* LOGO */
 .logo img {
-  width: 45px;
-  height: 45px;
+  /* keep logo visually consistent but allow it to scale on very small screens */
+  width: auto;
+  max-width: 45px;
+  height: auto;
+  max-height: 45px;
   object-fit: contain;
   filter: drop-shadow(0 0 6px cyan);
 }
@@ -775,11 +884,14 @@ body {
 
   /* When toggled open -> expand */
   .nav-links.nav-links--open {
-    max-height: 520px;
+    /* allow menu to grow up to the viewport minus header and remain scrollable
+       this prevents clipping on very small screens while keeping an animation */
+    max-height: calc(100vh - 96px);
     opacity: 1;
     pointer-events: auto;
     padding-top: 12px;
     padding-bottom: 12px;
+    overflow: auto;
   }
 
   .nav-links li { width: 100%; }

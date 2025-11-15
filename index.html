@@ -214,6 +214,16 @@
   <section id="skills">
     <div class="container">
       <h2>Skills</h2>
+      <p class="skills-intro">A concise overview of technologies I use and how proficient I am with each. Click a skill to see projects that use it.</p>
+
+      <div class="skills-controls" id="skills-controls" role="tablist" aria-label="Skill categories">
+        <button class="filter-btn active" data-filter="All" role="tab" aria-selected="true">All</button>
+        <button class="filter-btn" data-filter="Languages" role="tab" aria-selected="false">Languages</button>
+        <button class="filter-btn" data-filter="Frameworks" role="tab" aria-selected="false">Frameworks</button>
+        <button class="filter-btn" data-filter="Tools" role="tab" aria-selected="false">Tools</button>
+      </div>
+
+      <div id="skills-grid" class="skills-grid" aria-live="polite"></div>
     </div>
   </section>
 

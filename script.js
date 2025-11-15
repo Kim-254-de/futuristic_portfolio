@@ -133,6 +133,196 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // ====== SKILLS: data, rendering and interactions ======
+  const skillsGrid = document.getElementById('skills-grid');
+  const skillsControls = document.getElementById('skills-controls');
+
+  // placeholder for projects data (populated later). Declare here so skills code can reference it safely.
+  let projectsData = [];
+
+  // Build skills data from project tech tags when possible. Fallback to reasonable defaults.
+  function normalizeTech(t) {
+    return (t || '').toString().trim().replace(/\s+/g, ' ');
+  }
+
+  const knownLevel = {
+    'JavaScript': 92,
+    'TypeScript': 88,
+    'React': 90,
+    'Node.js': 88,
+    'Python': 80,
+    'Docker': 75,
+    'Kubernetes': 62,
+    'GraphQL': 78
+  };
+
+  function categorizeTech(name) {
+    const n = (name || '').toLowerCase();
+    if (/javascript|typescript|python|java|c#|c\+\+|go|rust/.test(n)) return 'Languages';
+    if (/react|vue|angular|svelte|next|express|node|django|flask|graphql/.test(n)) return 'Frameworks';
+    return 'Tools';
+  }
+
+  // mapping for nicer display names / normalization
+  function displayTech(t) {
+    const map = {
+      'js': 'JavaScript',
+      'javascript': 'JavaScript',
+      'node': 'Node.js',
+      'node.js': 'Node.js',
+      'ts': 'TypeScript',
+      'k8s': 'Kubernetes'
+    };
+    const key = t.toLowerCase();
+    return map[key] || t;
+  }
+
+  // icons map: small SVG per common tech (fallback is a circle)
+  const skillIcons = {
+    'JavaScript': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2h20v20H2z" fill="none" stroke="currentColor" stroke-width="1" /></svg>',
+    'TypeScript': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="3" stroke="currentColor" stroke-width="1"/></svg>',
+    'React': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1"/><path d="M2 12c4-6 8-6 10-6s6 0 10 6" stroke="currentColor" stroke-width="1" fill="none"/></svg>',
+    'Node.js': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7v10l8 4 8-4V7l-8-4z" stroke="currentColor" stroke-width="1" fill="none"/></svg>',
+    'Python': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 3h6v4" stroke="currentColor" stroke-width="1"/><path d="M18 21h-6v-4" stroke="currentColor" stroke-width="1"/></svg>',
+    'Docker': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="8" rx="1" stroke="currentColor" stroke-width="1"/></svg>',
+    'Kubernetes': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1"/></svg>',
+    'GraphQL': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polygon points="12,2 22,8 17,22 7,22 2,8" stroke="currentColor" stroke-width="1" fill="none"/></svg>'
+  };
+
+  let skillsData = [];
+  try {
+    const techSet = new Map();
+    if (projectsData && projectsData.length) {
+      projectsData.forEach(p => {
+        (p.tech || []).forEach(raw => {
+          const tNorm = normalizeTech(raw);
+          if (!tNorm) return;
+          const display = displayTech(tNorm);
+          if (!techSet.has(display)) techSet.set(display, { name: display, count: 0 });
+          techSet.get(display).count += 1;
+        });
+      });
+    }
+    // convert set to array of skills
+    techSet.forEach((val, key) => {
+      const name = val.name;
+      const category = categorizeTech(name);
+      const level = knownLevel[name] || Math.max(65, Math.min(92, 70 + (val.count * 4)));
+      skillsData.push({ name, category, level, years: undefined, tags: [name] });
+    });
+  } catch (err) {
+    skillsData = [];
+  }
+
+  // ensure some common skills are present as fallbacks
+  const ensure = ['JavaScript','React','Node.js','Python','Docker'];
+  ensure.forEach(s => {
+    if (!skillsData.find(x => x.name === s)) {
+      skillsData.push({ name: s, category: categorizeTech(s), level: knownLevel[s] || 72, years: undefined, tags: [s] });
+    }
+  });
+
+  function renderSkills(filter = 'All') {
+    if (!skillsGrid) return;
+    skillsGrid.innerHTML = '';
+    const list = skillsData.filter(s => filter === 'All' ? true : s.category === filter);
+    list.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'skill-card';
+
+      const head = document.createElement('div'); head.className = 'skill-head';
+  const icon = document.createElement('div'); icon.className = 'skill-icon';
+  // use a specific icon if available
+  icon.innerHTML = skillIcons[s.name] || '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1"/></svg>';
+      const name = document.createElement('div'); name.className = 'skill-name'; name.textContent = s.name;
+      head.appendChild(icon); head.appendChild(name);
+
+      const meta = document.createElement('div'); meta.className = 'skill-meta';
+      meta.textContent = (s.years ? s.years + ' yrs' : '') ;
+
+      const barLabel = document.createElement('div'); barLabel.className = 'skill-bar-label';
+      const labelLeft = document.createElement('span'); labelLeft.textContent = s.category;
+      const labelRight = document.createElement('span'); labelRight.textContent = s.level + '%';
+      barLabel.appendChild(labelLeft); barLabel.appendChild(labelRight);
+
+      const bar = document.createElement('div'); bar.className = 'skill-bar';
+      const fill = document.createElement('div'); fill.className = 'skill-bar-fill';
+      fill.setAttribute('role','progressbar');
+      fill.setAttribute('aria-valuemin','0');
+      fill.setAttribute('aria-valuemax','100');
+      fill.setAttribute('aria-valuenow', String(s.level));
+      fill.style.width = '0%';
+      // animate to target after a short delay
+      setTimeout(()=>{ fill.style.width = s.level + '%'; }, 80);
+      bar.appendChild(fill);
+
+      const actions = document.createElement('div'); actions.className = 'skill-actions';
+      const viewBtn = document.createElement('button');
+      viewBtn.className = 'view-projects';
+      viewBtn.textContent = 'Used in projects';
+      // Determine if any projects match this skill's tags
+      const matches = (projectsData || []).filter(p => (p.tech || []).some(t => s.tags.map(x=>x.toLowerCase()).includes((t||'').toLowerCase())));
+      if (!matches.length) viewBtn.setAttribute('disabled','');
+      viewBtn.addEventListener('click', function () {
+        // highlight projects by the skill tags
+        highlightProjects(s.tags);
+      });
+      actions.appendChild(viewBtn);
+
+      card.appendChild(head);
+      card.appendChild(meta);
+      card.appendChild(barLabel);
+      card.appendChild(bar);
+      card.appendChild(actions);
+
+      skillsGrid.appendChild(card);
+    });
+  }
+
+  // build filters (attach listeners)
+  if (skillsControls) {
+    skillsControls.addEventListener('click', function (e) {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      const filter = btn.getAttribute('data-filter');
+      // toggle active
+      skillsControls.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('active'); b.setAttribute('aria-selected','false');
+      });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      renderSkills(filter);
+    });
+  }
+
+  // highlight projects by tags and scroll to the first matched project
+  function highlightProjects(tags) {
+    if (!tags || !tags.length) return;
+    const projectsContainer = document.querySelector('#projects');
+    if (!projectsContainer) return;
+    const nodes = Array.from(projectsContainer.querySelectorAll('.project, article'));
+    const matches = nodes.filter(node => {
+      const techEls = Array.from(node.querySelectorAll('.tech span, .tech li'))
+        .map(n => n.textContent.trim().toLowerCase());
+      return tags.some(t => techEls.includes(t.toLowerCase()));
+    });
+    // clear previous highlights
+    nodes.forEach(n => n.classList.remove('highlight'));
+    if (matches.length === 0) {
+      // no matches: scroll to projects top
+      const top = document.querySelector('#projects');
+      if (top) top.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    // highlight matches and scroll to first
+    matches.forEach(m => m.classList.add('highlight'));
+    matches[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // remove highlight after a short timeout
+    setTimeout(()=>{ matches.forEach(m=>m.classList.remove('highlight')); }, 4200);
+  }
+
+  // initial render
+  renderSkills('All');
+
   // ===== Terminal typewriter effect =====
   const termEl = document.getElementById('term-lines');
   const caret = document.getElementById('term-caret');
@@ -265,8 +455,8 @@ document.addEventListener('DOMContentLoaded', function () {
       // autocomplete commands
       const COMMANDS = ['help','projects','open','skills','about','contact','resume','clear'];
 
-      // try to load projects from the #projects DOM; fall back to sample data
-      const projectsData = (function loadProjectsFromDOM() {
+  // try to load projects from the #projects DOM; fall back to sample data
+  projectsData = (function loadProjectsFromDOM() {
         try {
           const container = document.querySelector('#projects');
           const found = [];
@@ -327,6 +517,15 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         ];
       })();
+
+        // Re-render skills now that `projectsData` is populated so buttons enable/disable correctly
+        try {
+          const activeBtn = document.querySelector('#skills-controls .filter-btn.active');
+          const activeFilter = activeBtn ? activeBtn.getAttribute('data-filter') : 'All';
+          renderSkills(activeFilter);
+        } catch (err) {
+          /* ignore if skills not present */
+        }
 
       function appendLine(text, kind = 'out') {
         const d = document.createElement('div');
