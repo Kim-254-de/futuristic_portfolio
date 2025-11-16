@@ -248,6 +248,48 @@
             </div>
           </div>
         </article>
+        <article class="project">
+          <h3>Agriculture AI Marketplace</h3>
+          <div class="project-inner">
+            <img class="project-img" src="assets/projects/agri-ecom.jpg" alt="Agriculture ecommerce platform screenshot">
+            <div class="project-content">
+              <p>An agriculture e-commerce platform with integrated AI insights for crop recommendations, pricing signals and supply-chain forecasting tailored for farmers and buyers.</p>
+              <div class="tech"><span>React</span><span>Node.js</span><span>TensorFlow</span><span>Postgres</span></div>
+              <div class="project-actions">
+                <a class="btn btn-outline" href="#" target="_blank" rel="noopener">Live demo (placeholder)</a>
+                <a class="btn btn-ghost-blue" href="#projects">View details</a>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="project">
+          <h3>Competency AI Learning</h3>
+          <div class="project-inner">
+            <img class="project-img" src="assets/projects/ai-learning.jpg" alt="AI competency learning system screenshot">
+            <div class="project-content">
+              <p>An AI-powered competency-based learning platform that personalizes learning paths and assesses skills using adaptive algorithms and analytics.</p>
+              <div class="tech"><span>Python</span><span>FastAPI</span><span>ML</span><span>Postgres</span></div>
+              <div class="project-actions">
+                <a class="btn btn-outline" href="#" target="_blank" rel="noopener">Live demo (placeholder)</a>
+                <a class="btn btn-ghost-blue" href="#projects">View details</a>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="project">
+          <h3>Campus Shop</h3>
+          <div class="project-inner">
+            <img class="project-img" src="assets/projects/campus-shop.jpg" alt="Campus shopping system screenshot">
+            <div class="project-content">
+              <p>Online shopping system for campus students featuring campus-wide delivery, student discounts and an intuitive checkout flow for quick purchases.</p>
+              <div class="tech"><span>Vue</span><span>Node.js</span><span>Firebase</span></div>
+              <div class="project-actions">
+                <a class="btn btn-outline" href="#" target="_blank" rel="noopener">Live demo (placeholder)</a>
+                <a class="btn btn-ghost-blue" href="#projects">View details</a>
+              </div>
+            </div>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -256,6 +298,34 @@
   <section id="experience">
     <div class="container">
       <h2>Experience</h2>
+      <div class="experience-list">
+        <div class="exp-item">
+          <div class="exp-marker"></div>
+          <div class="exp-content">
+            <h4>Senior Full-Stack Engineer — Stellar Labs</h4>
+            <p class="exp-year">2023 — Present</p>
+            <p>Leading the front-end architecture and building scalable React applications with strong emphasis on performance and observability.</p>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-marker"></div>
+          <div class="exp-content">
+            <h4>Software Engineer — NovaTech</h4>
+            <p class="exp-year">2020 — 2023</p>
+            <p>Worked across the stack on microservices, GraphQL APIs and developer tooling to accelerate delivery across teams.</p>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-marker"></div>
+          <div class="exp-content">
+            <h4>Front-end Developer — Pixel Guild</h4>
+            <p class="exp-year">2018 — 2020</p>
+            <p>Built responsive UI components and early prototypes that evolved into the company design system.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -263,6 +333,41 @@
   <section id="testimonials">
     <div class="container">
       <h2>Testimonials</h2>
+        <div class="testimonials-carousel" id="testimonials-carousel" tabindex="0" role="region" aria-label="Testimonials carousel">
+          <div class="testimonials-track" id="testimonials-track">
+            <blockquote class="testimonial-card" data-index="0">
+              <div class="testimonial-meta">
+                <div class="avatar-initials">EA</div>
+                <div>
+                  <p class="testimonial-body">"Emmanuel's AI integration transformed our workflow — faster insights and smarter recommendations."</p>
+                  <cite>— Alex Morgan, Product Lead</cite>
+                </div>
+              </div>
+            </blockquote>
+            <blockquote class="testimonial-card" data-index="1">
+              <div class="testimonial-meta">
+                <div class="avatar-initials">JS</div>
+                <div>
+                  <p class="testimonial-body">"The competency learning platform was a game-changer for our training program."</p>
+                  <cite>— Jamie Smith, L&D Manager</cite>
+                </div>
+              </div>
+            </blockquote>
+            <blockquote class="testimonial-card" data-index="2">
+              <div class="testimonial-meta">
+                <div class="avatar-initials">KM</div>
+                <div>
+                  <p class="testimonial-body">"Responsive, thoughtful design and clear technical leadership throughout the project."</p>
+                  <cite>— K. Mensah, CTO</cite>
+                </div>
+              </div>
+            </blockquote>
+          </div>
+          <div class="carousel-controls" aria-hidden="false">
+            <button class="carousel-prev" id="carousel-prev" aria-label="Previous testimonial">◀</button>
+            <button class="carousel-next" id="carousel-next" aria-label="Next testimonial">▶</button>
+          </div>
+        </div>
     </div>
   </section>
 
@@ -270,12 +375,38 @@
   <section id="contact">
     <div class="container">
       <h2>Contact Me</h2>
+      <p class="contact-intro">I'm available for freelance work and full-time opportunities. Send me a message and I'll get back within a few days.</p>
+      <form id="contact-form" class="contact-form" action="#" method="post">
+        <label for="contact-name">Name</label>
+        <input id="contact-name" name="name" type="text" required>
+
+        <label for="contact-email">Email</label>
+        <input id="contact-email" name="email" type="email" required>
+
+        <label for="contact-message">Message</label>
+        <textarea id="contact-message" name="message" rows="6" required></textarea>
+
+        <div class="contact-actions">
+          <button type="submit" class="btn">Send Message</button>
+          <a class="btn btn-ghost-blue" href="mailto:kim@example.com">Email Me</a>
+        </div>
+        <p id="contact-status" aria-live="polite" class="contact-status" style="display:none"></p>
+      </form>
     </div>
   </section>
 
   <!-- ======== FOOTER ======== -->
   <footer>
-    <p>© 2025 Kim Eddy</p>
+    <div class="container">
+      <div class="footer-inner">
+        <p>© 2025 Kim Eddy</p>
+        <div class="footer-links">
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+          <a href="#about">About</a>
+        </div>
+      </div>
+    </div>
   </footer>
 
   <!-- Scripts -->
