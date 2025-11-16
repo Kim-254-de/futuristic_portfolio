@@ -5,10 +5,15 @@ body {
   background: #000;
   color: #fff;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 /* Make box-sizing predictable and ensure media scales down on small screens */
-html { box-sizing: border-box; scrollbar-gutter: stable; }
+html { 
+  box-sizing: border-box; 
+  scrollbar-gutter: stable;
+  overflow-x: hidden;
+}
 *, *::before, *::after { box-sizing: inherit; }
 
 /* Prevent images/media from causing horizontal overflow */
@@ -27,7 +32,9 @@ img, picture, video, svg { max-width: 100%; height: auto; display: block; }
   position: fixed; /* needed for absolute centering of nav */
   top: 0;
   left: 0;
+  right: 0;
   z-index: 1000;
+  box-sizing: border-box;
 }
 
 /* ======== HERO / TERMINAL STYLES ======== */
@@ -374,6 +381,15 @@ img, picture, video, svg { max-width: 100%; height: auto; display: block; }
   background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(5,0,20,0.25));
 }
 
+/* GLOBAL CONTAINER */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
 #about .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -417,6 +433,12 @@ section .container::before {
 }
 
 /* headings and interactive elements glow slightly to reinforce the futuristic theme */
+section {
+  width: 100%;
+  overflow-x: hidden;
+  padding: 40px 0;
+}
+
 section h2, section h3 {
   text-shadow: 0 6px 18px rgba(0,207,232,0.06);
 }
